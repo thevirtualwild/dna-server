@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require("passport");
+const keys = require("./config/keys");
 //const dnaRoutes = express.Router();
 const PORT = 4000;
 
@@ -23,8 +24,12 @@ app.use(bodyParser.json());
 
 // DB
 
-//can call this from ./config/keys.js if needed
-mongoose.connect('mongodb://127.0.0.1:27017/dna-dashboard', { useNewUrlParser: true })
+
+//local mongo connection (comment out to use Cloud version)
+//mongoose.connect('mongodb://127.0.0.1:27017/dna-dashboard', { useNewUrlParser: true });
+
+//Mongo Cloud Atlas - can modify this from ./config/keys.js if needed
+mongoose.connect(keys.mongoCloudURI, { useNewUrlParser: true});
 const connection = mongoose.connection;
 
 connection.once('open', function() {
