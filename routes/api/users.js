@@ -3,6 +3,7 @@ const router  = express.Router();
 const bcrypt  = require("bcryptjs");
 const jwt     = require("jsonwebtoken");
 const keys    = require("../../config/keys");
+const randomatic = require("randomatic");
 
 //Load input validation
 const validateRegisterInput = require("../../validation/register");
@@ -46,7 +47,8 @@ router.post("/register", (req, res) => {
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        account_key: randomatic('A0',5)
       });
 
       //Hash PW before saving
