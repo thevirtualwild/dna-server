@@ -6,6 +6,14 @@ const DeviceSchema = new Schema({
     type: String,
     required: true
   },
+  device_serial: {
+    type: String,
+    required: false
+  },
+  device_UUID: {
+    type: String,
+    required: false
+  }
 
 });
 module.exports = User = mongoose.model("devices", DeviceSchema);
