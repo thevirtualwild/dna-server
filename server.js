@@ -11,6 +11,8 @@ const PORT = 4000;
 
 
 const users = require("./routes/api/users");
+const accounts = require("./routes/api/accounts");
+const devices = require("./routes/api/devices");
 
 //CORS
 app.use(cors());
@@ -45,10 +47,12 @@ require("./config/passport")(passport);
 
 // Routes
 app.use("/api/users", users);
+app.use("/api/accounts", accounts);
+app.use("/api/devices", devices);
 
 
 
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);
-    
+
 });
