@@ -1,13 +1,8 @@
 const express = require("express");
 const router  = express.Router();
-const bcrypt  = require("bcryptjs");
-const jwt     = require("jsonwebtoken");
 const keys    = require("../../config/keys");
 const randomatic = require("randomatic");
 
-//Load input validation
-const validateRegisterInput = require("../../validation/register");
-const validateLoginInput    = require("../../validation/login");
 
 //Load Account model
 const Account = require("../../models/Account");
@@ -19,10 +14,8 @@ router.get("/", (req, res) => {
   Account.find(function(err, accounts) {
       if (err) {
         console.log(err);
-      } else if (!accounts.keys(res.data).length) {
-        res.status(200).json({accountnotfound: "no accounts found"});
       } else {
-        res.json(accounts);
+        res.status(200).json(accounts);
       }
   });
 });
@@ -47,15 +40,7 @@ router.get("/:id", (req, res) => {
 // @desc  Register Account
 // @access Public
 router.post("/register", (req, res) => {
-
-  // Form validation
-  const { errors, isValid } = validateRegisterInput(req.body);
-
-  // Check validation
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
-
+  //check to make sure account doestn exist
   Account.findOne({ email: req.body.email })
     .then(user => {
       if (user) {
@@ -64,11 +49,29 @@ router.post("/register", (req, res) => {
 
         //create new user if one doesnt exist with the email
         const newAccount = new Account({
-          name: req.body.name,
-          email: req.body.email,
-          password: req.body.password,
+          account_name: req.body.name,
+          contact_name: req.body.contact_name,
+          contact_email: req.body.email,
+          contact_phone: req.body.phone,
+          billing_address: req.body.billing_address,
+          billing_city: req.body.billing_city,
+          billing_state: req.body.billing_state,
+          billing_postal: req.body.billing_postal,
+          hours_of_operation: req.body.hours,
+          company_details: req.body.company_details,
+          additional_details: req.body.additional_details,
+          created_by: null, // User who created the account
+          last_modified_by: null, //Currently Logged In User
           account_key: randomatic('A0',5)
         });
+
+        newAccount.save()
+          .then(account => res.json(account))
+          .catch(err => {
+            console.log(err);
+            res.status(400).json({ error: "Record not Created. Error Thrown"});
+          });
+
       }
   }); //end Account.findone
 

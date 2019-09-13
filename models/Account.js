@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 // Create Schema
 const AccountSchema = new Schema({
-  account_id: {
-    type: String,
-    required: true
-  },
   account_name: { // Company Name
     type: String,
     required: true
