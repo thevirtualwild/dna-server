@@ -1,45 +1,59 @@
 const express = require("express");
 const router  = express.Router();
-const bcrypt  = require("bcryptjs");
-const jwt     = require("jsonwebtoken");
 const keys    = require("../../config/keys");
-const randomatic = require("randomatic");
+const auth    = require("../../middleware/auth");
 
-//Load input validation
-const validateRegisterInput = require("../../validation/register");
-const validateLoginInput    = require("../../validation/login");
 
 //Load Device model
 const Device = require("../../models/Device");
+const Account = require("../../models/Account");
 
 // @route GET api/devices/
 // @desc  See All Devices
-// @access Public
-router.get("/", (req, res) => {
-  Device.find(function(err, devices) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json(devices);
-      }
-  });
+// @access Private
+router.get("/", auth, async (req, res) => {
+
+  try {
+    const devices = await Device.find({ user: req.user.id });
+    res.json(devices);
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send('Server Error');
+  }
 });
 
 // @route GET api/devices/:{id}
 // @desc  See Device by ID
-// @access Public
-router.get("/:id", (req, res) => {
-  // Find Device by Email
-  Device.findById(req.params.id).then(device => {
-    //Check if user exists
+// @access Private
+router.get("/:id", auth, async (req, res) => {
+  try {
+    const device = await Device.findById(req.params.id);
+
     if (!device) {
-      return res.status(404).json({ devicenotfound: "Device not found" });
+      res.status(404).json({ devicenotfound: "Device not found" });
+    } else {
+      res.status(200).json(device);
     }
-    return res.status(200).json(device);
-  });//end Device.findone
-}); //end router(Login)
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send("Server Error");
+  }
+}); //end Get Device by ID
 
 
+// @route   GET api/devices/:account
+// @desc    See devices associated with an account
+// @access  Private
+
+router.get("/:account", auth, async (req, res) => {
+    try {
+
+
+    } catch (e) {
+      console.error(e.message);
+      res.status(500).send("Server Error");
+    } 
+}); // end get account devices
 
 
 module.exports = router;

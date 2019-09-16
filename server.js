@@ -9,7 +9,7 @@ const randomatic = require("randomatic");
 //const dnaRoutes = express.Router();
 const PORT = 4000;
 
-
+const auth = require("./routes/api/auth");
 const users = require("./routes/api/users");
 const accounts = require("./routes/api/accounts");
 const devices = require("./routes/api/devices");
@@ -46,6 +46,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 // Routes
+app.use("api/auth", auth);
 app.use("/api/users", users);
 app.use("/api/accounts", accounts);
 app.use("/api/devices", devices);
