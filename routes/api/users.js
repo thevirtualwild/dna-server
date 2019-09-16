@@ -76,7 +76,7 @@ router.post("/register",
 
       jwt.sign(
         payload,
-        config.get('jwtSecret'),
+        keys.secretOrKey,
         {
           expiresIn: 360000
         },
