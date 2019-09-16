@@ -46,7 +46,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 // Routes
-app.use("api/auth", auth);
+app.use("/api/auth", auth);
 app.use("/api/users", users);
 app.use("/api/accounts", accounts);
 app.use("/api/devices", devices);
